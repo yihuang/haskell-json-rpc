@@ -9,8 +9,8 @@ import qualified Data.ByteString.Lazy as LBS
 import qualified Data.Attoparsec.Lazy as A
 import Control.Applicative ((<$>), (<*>))
 import qualified Data.Text as T
-import Data.Aeson (Value(..), json, ToJSON(..), FromJSON(..), fromJSON,
-                   object, (.:), (.=), Result(..))
+import Data.Aeson (Value(Object), json, ToJSON(toJSON), FromJSON(parseJSON), fromJSON,
+                   object, (.:), (.=), Result(Success, Error))
 
 data Request = Request {
     reqMethod :: String
@@ -26,10 +26,10 @@ instance ToJSON Request where
                ]
 
 instance FromJSON Request where
-    parseJSON (Object v) = Request <$>
-                           v .: "method" <*>
-                           v .: "params" <*>
-                           v .: "id"
+    parseJSON (Object v) = Request
+                           <$> v .: "method"
+                           <*> v .: "params"
+                           <*> v .: "id"
 
 data Response = Response {
     respResult :: Value
@@ -45,8 +45,8 @@ instance ToJSON Response where
                ]
 
 instance FromJSON Response where
-    parseJSON (Object v) = Response <$>
-                               v .: "result"
+    parseJSON (Object v) = Response
+                           <$> v .: "result"
                            <*> v .: "error"
                            <*> v .: "id"
 

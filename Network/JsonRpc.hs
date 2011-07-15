@@ -1,11 +1,8 @@
 module Network.JsonRpc (
     Request(..)
   , Response(..)
-  , RpcProxy
-  , RpcMethod
-  , toProxy
-  , toMethod
-  , parseRpc
+  , RpcProxy(..)
+  , RpcMethod(..)
   , server
   , client
   , httpProxy
