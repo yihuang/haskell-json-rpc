@@ -1,18 +1,16 @@
 module Network.JsonRpc.Server (
     handleReq
   , handleLine
-  , handle
+  , server
   , interactive
 ) where
 
-import Control.Monad                (forever)
-import Control.Applicative          ((<$>))
-
+import Control.Monad            (forever)
+import Control.Applicative      ((<$>))
+import Data.Aeson               (Value(..), encode)
+import Network.JsonRpc.Protocol (Request(..), Response(..), parseRpc)
 import qualified Data.ByteString.Lazy as LBS
 import qualified Data.ByteString      as BS
-
-import Data.Aeson     
-import Network.JsonRpc
 
 type MethodDescriptor = (String, ([Value] -> IO Value))
 
@@ -27,12 +25,12 @@ handleReq methods req = do
 
 handleLine :: (Request -> IO Response) -> LBS.ByteString -> IO LBS.ByteString
 handleLine f s =
-    case parse s of
+    case parseRpc s of
         Nothing -> fail "invalid request"
         Just r  -> encode <$> f r
 
-handle :: [MethodDescriptor] -> LBS.ByteString -> IO LBS.ByteString
-handle = handleLine . handleReq
+server :: [MethodDescriptor] -> LBS.ByteString -> IO LBS.ByteString
+server = handleLine . handleReq
 
 interactive :: (LBS.ByteString -> IO LBS.ByteString) -> IO ()
 interactive f = forever $ do

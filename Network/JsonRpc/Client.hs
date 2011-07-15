@@ -1,33 +1,34 @@
 module Network.JsonRpc.Client (
-    proxy
+    client
+  , httpProxy
 ) where
 
-import Control.Applicative
 import qualified Data.ByteString      as BS
 import qualified Data.ByteString.Lazy as LBS
-import Data.Aeson (Value, encode)
-import Network.JsonRpc
-import Network.JsonRpc.Protocol (parse)
+import Control.Applicative          ((<$>))
+import Data.Aeson                   (Value, encode)
+import Network.JsonRpc.Internals    (RpcProxy, toProxy)
+import Network.JsonRpc.Protocol     (Request(..), Response(..), parseRpc)
 
-transport :: LBS.ByteString -> IO LBS.ByteString
-transport req = do
+-- TODO
+httpTransport :: String -> LBS.ByteString -> IO LBS.ByteString
+httpTransport url req = do
     print req
     l <- BS.getLine
     return $ LBS.fromChunks [l]
 
-worker :: String -> String -> [Value] -> IO Value
-worker url method params = do
+client :: (LBS.ByteString -> IO LBS.ByteString) -> String -> [Value] -> IO Value
+client serv method params = do
     let req = encode $ Request {
         reqMethod = method
       , reqParams = params
       , reqId = 1
     }
-    rsp <- parse <$> transport req
+    rsp <- parseRpc <$> serv req
     case rsp of
         Just r ->
             return $ respResult r
         Nothing -> fail "invalid response"
 
-proxy :: RpcProxy a => String -> String -> a
-proxy url method = toProxy (worker url method)
-
+httpProxy :: RpcProxy a => String -> String -> a
+httpProxy url method = toProxy (client (httpTransport url) method)

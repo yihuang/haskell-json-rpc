@@ -5,8 +5,13 @@ module Network.JsonRpc (
   , RpcMethod
   , toProxy
   , toMethod
-  , parse
+  , parseRpc
+  , server
+  , client
+  , httpProxy
 ) where
 
 import Network.JsonRpc.Protocol
 import Network.JsonRpc.Internals
+import Network.JsonRpc.Server
+import Network.JsonRpc.Client
