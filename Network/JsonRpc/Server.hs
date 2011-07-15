@@ -1,8 +1,6 @@
 module Network.JsonRpc.Server (
-    handleReq
-  , handleLine
-  , server
-  , interactive
+    server
+  , MethodDescriptor 
 ) where
 
 import Control.Monad            (forever)

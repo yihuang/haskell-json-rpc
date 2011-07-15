@@ -1,5 +1,6 @@
 module Network.JsonRpc.Client (
     client
+  , proxy
   , httpProxy
 ) where
 
