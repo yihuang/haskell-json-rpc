@@ -2,15 +2,12 @@
 module Network.JsonRpc.Protocol (
     Request(..)
   , Response(..)
-  , parseRpc
 ) where
 
-import qualified Data.ByteString.Lazy as LBS
-import qualified Data.Attoparsec.Lazy as A
 import Control.Applicative ((<$>), (<*>))
 import qualified Data.Text as T
-import Data.Aeson (Value(Object), json, ToJSON(toJSON), FromJSON(parseJSON), fromJSON,
-                   object, (.:), (.=), Result(Success, Error))
+import Data.Aeson (Value(Object), ToJSON(toJSON), FromJSON(parseJSON),
+                   fromJSON, object, (.:), (.=) )
 
 data Request = Request {
     reqMethod :: String
@@ -50,9 +47,3 @@ instance FromJSON Response where
                            <*> v .: "error"
                            <*> v .: "id"
 
-parseRpc :: FromJSON a => LBS.ByteString -> Maybe a
-parseRpc input = do
-    v <- A.maybeResult $ A.parse json input
-    case fromJSON v of
-        Success a -> Just a
-        Error _   -> Nothing

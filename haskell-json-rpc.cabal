@@ -48,7 +48,13 @@ Cabal-version:       >=1.2
 
 Library
   -- Modules exported by the library.
-  Exposed-modules:     Network.JsonRpc, Network.JsonRpc.Client, Network.JsonRpc.Protocol, Network.JsonRpc.Internals, Network.JsonRpc.Server
+  Exposed-modules:
+      Network.JsonRpc,
+      Network.JsonRpc.Client,
+      Network.JsonRpc.Protocol,
+      Network.JsonRpc.Internals,
+      Network.JsonRpc.Server,
+      Network.JsonRpc.Utils
   
   -- Packages needed in order to build this package.
   Build-depends:

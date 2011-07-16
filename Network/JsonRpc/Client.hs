@@ -9,7 +9,8 @@ import qualified Data.ByteString.Lazy as LBS
 import Control.Applicative          ((<$>))
 import Data.Aeson                   (Value, encode)
 import Network.JsonRpc.Internals    (RpcProxy, toProxy)
-import Network.JsonRpc.Protocol     (Request(..), Response(..), parseRpc)
+import Network.JsonRpc.Protocol     (Request(..), Response(..))
+import Network.JsonRpc.Utils        (parseRpc)
 
 client :: (LBS.ByteString -> IO LBS.ByteString) -> String -> [Value] -> IO Value
 client serv method params = do

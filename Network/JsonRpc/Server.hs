@@ -6,7 +6,8 @@ module Network.JsonRpc.Server (
 import Control.Monad            (forever)
 import Control.Applicative      ((<$>))
 import Data.Aeson               (Value(..), encode)
-import Network.JsonRpc.Protocol (Request(..), Response(..), parseRpc)
+import Network.JsonRpc.Protocol (Request(..), Response(..))
+import Network.JsonRpc.Utils    (parseRpc)
 import qualified Data.ByteString.Lazy as LBS
 import qualified Data.ByteString      as BS
 
