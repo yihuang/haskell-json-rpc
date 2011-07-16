@@ -5,7 +5,7 @@ module Network.JsonRpc.Server (
 
 import Control.Monad            (forever)
 import Control.Applicative      ((<$>))
-import Data.Aeson               (Value(..), encode)
+import Data.Aeson               (Value(..), encode, toJSON)
 import Network.JsonRpc.Protocol (Request(..), Response(..))
 import Network.JsonRpc.Utils    (parseRpc)
 import qualified Data.ByteString.Lazy as LBS
@@ -23,10 +23,12 @@ handleReq methods req = do
             return $ Response r Null (reqId req)
 
 handleLine :: (Request -> IO Response) -> LBS.ByteString -> IO LBS.ByteString
-handleLine f s =
-    case parseRpc s of
-        Nothing -> fail "invalid request"
-        Just r  -> encode <$> f r
+handleLine f s = do
+    let errRsp msg = Response Null (toJSON msg) 0
+    rsp <- case parseRpc s of
+        Nothing -> return $ errRsp "invalid request"
+        Just r  -> f r `catch` (\e -> return $ errRsp $ show e)
+    return $ encode rsp
 
 server :: [MethodDescriptor] -> LBS.ByteString -> IO LBS.ByteString
 server = handleLine . handleReq
