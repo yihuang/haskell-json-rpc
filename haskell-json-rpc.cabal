@@ -16,7 +16,7 @@ Synopsis:            haskell-json-rpc
 -- Description:         
 
 -- URL for the project homepage or repository.
-Homepage:            http://github.com/huangyi/haskell-json-rpc
+Homepage:            http://github.com/yihuang/haskell-json-rpc
 
 -- The license under which the package is released.
 License:             BSD3
@@ -51,7 +51,12 @@ Library
   Exposed-modules:     Network.JsonRpc, Network.JsonRpc.Client, Network.JsonRpc.Protocol, Network.JsonRpc.Internals, Network.JsonRpc.Server
   
   -- Packages needed in order to build this package.
-  Build-depends: base, bytestring, text, attoparsec, aeson
+  Build-depends:
+      base == 4.*,
+      bytestring,
+      text, 
+      aeson >= 0.3.2.9,
+      attoparsec >= 0.8.6.1
   
   -- Modules not exported by this package.
   -- Other-modules:       

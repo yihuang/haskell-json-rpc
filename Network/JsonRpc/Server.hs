@@ -36,3 +36,4 @@ interactive f = forever $ do
     let ll = LBS.fromChunks [l]
     o <- f ll
     LBS.putStr o
+

@@ -1,4 +1,4 @@
-import Network.JsonRpc (server, client, proxy, toMethod)
+import Network.JsonRpc (server, proxy, toMethod)
 
 -- method exposed through rpc
 add :: Int -> Int -> IO Int

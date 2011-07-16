@@ -31,17 +31,18 @@ import Network.JsonRpc.Client
 --
 -- >import Network.JsonRpc (server, client, proxy, toMethod)
 -- >
--- >-- method exposed through rpc
+-- >-- method exposed with rpc
 -- >add :: Int -> Int -> IO Int
 -- >add a b = return $ a + b
 -- >
 -- >-- a server handler. ByteString -> IO ByteString
+-- >-- in a real world rpc server, this handler can be used to handle network message.
 -- >serv = server [("add", toMethod add)]
 -- >
 -- >-- a proxy which call serv directly.
+-- >-- a real world rpc proxy would communicate with remote server through network.
 -- >directProxy = proxy serv
 -- >
--- >-- client proxy of add method
 -- >add' :: Int -> Int -> IO Int
 -- >add' = directProxy "add"
 -- >

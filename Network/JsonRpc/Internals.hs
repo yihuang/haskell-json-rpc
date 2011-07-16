@@ -5,7 +5,7 @@ module Network.JsonRpc.Internals (
   , RpcProxy(..)
 ) where
 
-import Data.Aeson           (Value(..), Result(..), ToJSON(toJSON), FromJSON, fromJSON)
+import Data.Aeson (Value(..), Result(..), ToJSON(toJSON), FromJSON, fromJSON)
 
 class RpcMethod a where
     toMethod :: a -> [Value] -> IO Value
