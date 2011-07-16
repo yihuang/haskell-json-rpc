@@ -4,6 +4,7 @@ import System.Posix.Types
 import Foreign.C.Types (CTime)
 import qualified Data.ByteString.Lazy as LBS
 import Control.Concurrent
+import Control.Exception
 import Control.Monad
 import Data.Attoparsec.Number
 import Data.Aeson
@@ -33,8 +34,14 @@ echo = p "echo" :: String -> IO String
 timestamp = p "timestamp" :: IO EpochTime
 random = p "random" :: IO Int
 
-main = forM [1..10] $ \n -> forkIO $ do
-           echo ("test"++show n) >>= putStrLn . ("echo: "++) .show
-           timestamp >>= putStrLn . ("timestamp: "++) . show
-           random >>= putStrLn . ("random: "++) . show
-
+main = do
+    vars <- forM [1..10] $ \n -> do
+        finish <- newEmptyMVar
+        forkIO $ do
+            echo ("test"++show n) >>= putStrLn . ("echo: "++) .show
+            timestamp >>= putStrLn . ("timestamp: "++) . show
+            random >>= putStrLn . ("random: "++) . show
+            `finally`
+            putMVar finish ()
+        return finish
+    forM_ vars takeMVar
