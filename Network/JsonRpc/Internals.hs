@@ -1,5 +1,4 @@
-{-# LANGUAGE FlexibleInstances, TypeSynonymInstances #-}
-
+-- | Full description of this trick: http://okmij.org/ftp/Haskell/vararg-fn.lhs
 module Network.JsonRpc.Internals (
     RpcMethod(..)
   , RpcProxy(..)

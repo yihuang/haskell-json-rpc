@@ -29,6 +29,7 @@ proxy client method = toProxy $ worker client method
 
 httpClient :: String -> LBS.ByteString -> IO LBS.ByteString
 httpClient url req = do
+    -- TODO
     print req
     l <- BS.getLine
     return $ LBS.fromChunks [l]
