@@ -13,7 +13,6 @@ module Network.JsonRpc (
     -- $example
     RpcProxy(..)
   , RpcMethod(..)
-  , client
   , proxy
   , server
   , httpProxy
@@ -29,7 +28,7 @@ import Network.JsonRpc.Client
 -- $example
 -- example:
 --
--- >import Network.JsonRpc (server, client, proxy, toMethod)
+-- >import Network.JsonRpc (server, proxy, toMethod)
 -- >
 -- >-- method exposed with rpc
 -- >add :: Int -> Int -> IO Int

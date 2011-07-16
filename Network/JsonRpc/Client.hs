@@ -1,6 +1,5 @@
 module Network.JsonRpc.Client (
-    client
-  , proxy
+    proxy
   , httpProxy
 ) where
 
@@ -12,29 +11,28 @@ import Network.JsonRpc.Internals    (RpcProxy, toProxy)
 import Network.JsonRpc.Protocol     (Request(..), Response(..))
 import Network.JsonRpc.Utils        (parseRpc)
 
-client :: (LBS.ByteString -> IO LBS.ByteString) -> String -> [Value] -> IO Value
-client serv method params = do
+worker :: (LBS.ByteString -> IO LBS.ByteString) -> String -> [Value] -> IO Value
+worker client method params = do
     let req = encode $ Request {
         reqMethod = method
       , reqParams = params
       , reqId = 1
     }
-    rsp <- parseRpc <$> serv req
+    rsp <- parseRpc <$> client req
     case rsp of
         Just r ->
             return $ respResult r
         Nothing -> fail "invalid response"
 
 proxy :: RpcProxy a => (LBS.ByteString -> IO LBS.ByteString) -> String -> a
-proxy serv method = toProxy $ client serv method
+proxy client method = toProxy $ worker client method
 
--- TODO
-httpTransport :: String -> LBS.ByteString -> IO LBS.ByteString
-httpTransport url req = do
+httpClient :: String -> LBS.ByteString -> IO LBS.ByteString
+httpClient url req = do
     print req
     l <- BS.getLine
     return $ LBS.fromChunks [l]
 
 httpProxy :: RpcProxy a => String -> String -> a
-httpProxy url = proxy (httpTransport url)
+httpProxy url = proxy (httpClient url)
 
